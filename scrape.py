@@ -1,17 +1,18 @@
-#This class takes individual reviews and scrapes them for the information
+# This class takes individual reviews and scrapes them for the information
 
 from review import Review
+
 
 class Scrape:
     def scrape_review(review):
         date = review.find("time", "date").text
 
-        summary = review.find("h2", "summary").text.strip('"') #abstract
-        summary = Scrape.clean(summary) #call function clean to remove bad characters and line breaks in the text
+        summary = review.find("h2", "summary").text.strip('"')  # abstract
+        summary = Scrape.clean(summary)  # call function clean to remove bad characters and line breaks in the text
 
-        rating = review.find("span", "rating").find("span")["title"] #overall rating
+        rating = review.find("span", "rating").find("span")["title"]  # overall rating
 
-        #subratings
+        # subratings
         workLifeBalance = None
         cultureAndValues = None
         careerOpportunities = None
@@ -29,20 +30,21 @@ class Scrape:
             subRating = None
 
         authorJobTitle = review.find("span", "authorJobTitle").text
-        authorJobTitle = Scrape.clean(authorJobTitle) #call function clean to remove bad characters and line breaks in the text
+        authorJobTitle = Scrape.clean(
+            authorJobTitle)  # call function clean to remove bad characters and line breaks in the text
 
         mainText = review.find("p", "mainText").text
-        mainText = Scrape.clean(mainText) #call function clean to remove bad characters and line breaks in the text
+        mainText = Scrape.clean(mainText)  # call function clean to remove bad characters and line breaks in the text
 
-        info = review.find_all("div", "v2__EIReviewDetailsV2__fullWidth") # both con and pro stored in info
+        info = review.find_all("div", "v2__EIReviewDetailsV2__fullWidth")  # both con and pro stored in info
 
         pro = info[0].find("p", "v2__EIReviewDetailsV2__bodyColor").text
-        pro = Scrape.clean(pro) #call function clean to remove bad characters and line breaks in the text
+        pro = Scrape.clean(pro)  # call function clean to remove bad characters and line breaks in the text
 
         con = info[1].find("p", "v2__EIReviewDetailsV2__bodyColor").text
-        con = Scrape.clean(con) #call function clean to remove bad characters and line breaks in the text
+        con = Scrape.clean(con)  # call function clean to remove bad characters and line breaks in the text
 
-        #returns all the information for the review, storing it in a Review object to make it easier to access later
+        # returns all the information for the review, storing it in a Review object to make it easier to access later
         return Review(date, summary, rating, workLifeBalance, cultureAndValues, careerOpportunities,
                       compensationAndBenefits, seniorManagement, authorJobTitle, mainText, pro, con)
 
